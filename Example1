@@ -1,0 +1,18 @@
+USE Sypachov
+DECLARE @name VARCHAR(20), @kaf VARCHAR(20)
+DECLARE @i SMALLINT, @message VARCHAR (50)
+PRINT 'Список групп 3-его курса'
+DECLARE my_cursor CURSOR LOCAL FORWARD_ONLY STATIC
+	FOR SELECT NameGroup, Kafedra FROM StudGroup WHERE Course=3 ORDER BY Kafedra
+OPEN my_cursor
+SET @i = 0
+FETCH NEXT FROM my_cursor INTO @name, @kaf
+WHILE @@FETCH_STATUS = 0
+BEGIN
+	SET @i = @i + 1
+	SET @message = CAST(@i AS VARCHAR(2)) + '. ' + @kaf + ' ' + @name
+	PRINT @message
+	FETCH NEXT FROM my_cursor INTO @name, @kaf
+END
+CLOSE my_cursor 
+DEALLOCATE my_cursor
