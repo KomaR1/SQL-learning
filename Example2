@@ -1,0 +1,19 @@
+USE Sypachov 
+DECLARE min_mark_cursor CURSOR LOCAL FORWARD_ONLY STATIC
+	FOR SELECT Id_Student, MIN(Mark)
+	FROM Exam GROUP BY Id_Student
+OPEN min_mark_cursor
+DECLARE @res_table TABLE (id INT, res VARCHAR(20))
+DECLARE @id INT, @x INT
+FETCH NEXT FROM min_mark_cursor INTO @id, @x
+WHILE @@FETCH_STATUS = 0
+BEGIN
+	IF @x=2 INSERT INTO @res_table VALUES (@id, 'не сдана')
+	IF @x=3 INSERT INTO @res_table VALUES (@id, 'с тройками')
+	IF @x=4 INSERT INTO @res_table VALUES (@id, 'с четверками')
+	IF @x=5 INSERT INTO @res_table VALUES (@id, 'на отлично')
+	FETCH NEXT FROM min_mark_cursor INTO @id, @x
+END
+SELECT * FROM @res_table
+CLOSE min_mark_cursor
+DEALLOCATE min_mark_cursor
