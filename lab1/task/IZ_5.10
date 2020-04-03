@@ -1,0 +1,24 @@
+USE Sypachov
+DECLARE @n INT, @Counter INT, @Group VARCHAR(40)
+SET @n = 19
+SET @Counter = 0
+SET @Group = 'ИДБ-17-07'
+DECLARE mark_cursor CURSOR SCROLL LOCAL STATIC
+    FOR SELECT DISTINCT Student.FIO, Student.NameGroup, AVG(Exam.mark) as avg_mark
+FROM Student 
+    INNER JOIN Exam ON Student.Id_Student = Exam.Id_Student
+GROUP BY Student.NameGroup, Student.Id_Student, Student.FIO HAVING Student.NameGroup = 'ИДБ-17-07'
+ORDER BY avg_mark DESC
+OPEN mark_cursor
+DECLARE @TOP_STUDENTS TABLE (fio VARCHAR(40), res INT)
+DECLARE @fio VARCHAR(40), @res INT, @Gr VARCHAR(40)
+WHILE @Counter < @n AND @@FETCH_STATUS = 0
+BEGIN
+    SET @Counter = @Counter + 1
+    IF @Gr = @Group AND @Counter < @n INSERT INTO @TOP_STUDENTS VALUES (@fio, @res)
+    FETCH NEXT FROM mark_cursor INTO @fio, @Gr, @res
+END
+FETCH FIRST FROM mark_cursor INTO @fio, @Gr, @res
+SELECT * FROM @TOP_STUDENTS
+CLOSE mark_cursor
+DEALLOCATE mark_cursor
