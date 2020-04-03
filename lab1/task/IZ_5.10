@@ -1,5 +1,10 @@
+  
 USE Sypachov
 DECLARE @Group VARCHAR(40)
+DECLARE @TOP_STUDENTS TABLE (fio VARCHAR(40), res INT)
+DECLARE @fio VARCHAR(40), @res INT, @Gr VARCHAR(40)
+DECLARE @n INT, @Counter INT
+SET @n = 0
 SET @Group = 'ИДБ-17-07'
 DECLARE mark_cursor CURSOR SCROLL LOCAL STATIC
     FOR SELECT DISTINCT Student.FIO, Student.NameGroup, AVG(Exam.mark) as avg_mark
@@ -8,10 +13,6 @@ FROM Student
 GROUP BY Student.NameGroup, Student.Id_Student, Student.FIO 
 ORDER BY avg_mark DESC
 OPEN mark_cursor
-DECLARE @TOP_STUDENTS TABLE (fio VARCHAR(40), res INT)
-DECLARE @fio VARCHAR(40), @res INT, @Gr VARCHAR(40)
-DECLARE @n INT, @Counter INT
-SET @n = 0
 WHILE @n < 19 AND @@FETCH_STATUS = 0
 BEGIN
     SET @n += 1
