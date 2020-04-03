@@ -17,10 +17,11 @@ FROM Student
 GROUP BY Student.NameGroup, Student.Id_Student, Student.FIO
 ORDER BY avg_mark DESC
 OPEN mark_cursor
+FETCH NEXT FROM mark_cursor INTO @fio, @Gr, @res
 WHILE @Counter < @n AND @@FETCH_STATUS = 0
 BEGIN
     SET @Counter += 1
-    IF @Gr = @Group INSERT INTO @TOP_STUDENTS VALUES (@fio, @res)
+    INSERT INTO @TOP_STUDENTS VALUES (@fio, @res)
     FETCH NEXT FROM mark_cursor INTO @fio, @Gr, @res
 END
 FETCH FIRST FROM mark_cursor INTO @fio, @Gr, @res
