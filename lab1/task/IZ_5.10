@@ -5,11 +5,16 @@ DECLARE @fio VARCHAR(40), @res INT, @Gr VARCHAR(40)
 SET @n = 19
 SET @Counter = 0
 SET @Group = 'ИДБ-17-07'
+IF @n = 0
+BEGIN
+PRINT 'Недопустимое значение n'
+RETURN
+END
 DECLARE mark_cursor CURSOR SCROLL LOCAL STATIC
     FOR SELECT DISTINCT Student.FIO, Student.NameGroup, AVG(Exam.mark) as avg_mark
 FROM Student 
-    INNER JOIN Exam ON Student.Id_Student = Exam.Id_Student
-GROUP BY Student.NameGroup, Student.Id_Student, Student.FIO HAVING Student.NameGroup = 'ИДБ-17-07'
+    INNER JOIN Exam ON Student.Id_Student = Exam.Id_Student WHERE Student.NameGroup = @Group
+GROUP BY Student.NameGroup, Student.Id_Student, Student.FIO
 ORDER BY avg_mark DESC
 OPEN mark_cursor
 WHILE @Counter < @n AND @@FETCH_STATUS = 0
