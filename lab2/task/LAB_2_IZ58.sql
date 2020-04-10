@@ -1,0 +1,15 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION IZ58
+(	
+	@group VARCHAR(50)
+)
+RETURNS TABLE 
+AS
+RETURN
+(
+	SELECT Id_Student, FIO FROM Student WHERE Id_Student IN (
+	SELECT Id_Student FROM Exam WHERE Exam.Mark > 4 GROUP BY Id_Student) AND NameGroup=@group
+)
