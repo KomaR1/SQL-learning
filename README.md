@@ -1,2 +1,2 @@
-# a.sypachov-stankin.ru
+# SQL learning
 Working with cursors SQL Server Management Studio
